@@ -1,6 +1,5 @@
 package com.cjw.note.web;
 
-import com.alibaba.fastjson.JSON;
 import com.cjw.note.po.NoteType;
 import com.cjw.note.po.User;
 import com.cjw.note.service.NoteTypeService;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet("/type")
@@ -33,7 +31,30 @@ public class NoteTypeServlet extends HttpServlet {
             typeList(req,resp);
         }else if ("delete".equals(actionName)){
             deleteType(req,resp);
+        }else  if ("addOrUpdate".equals(actionName)){
+            addOrUpdate(req,resp);
         }
+    }
+
+    /**
+     * 添加或修改类型
+             1. 接收参数 （类型名称、类型ID）
+             2. 获取Session作用域中的user对象，得到用户ID
+             3. 调用Service层的更新方法，返回ResultInfo对象
+             4. 将ResultInfo转换成JSON格式的字符串，响应给ajax的回调函数
+     * @param req
+     * @param resp
+     */
+    private void addOrUpdate(HttpServletRequest req, HttpServletResponse resp) {
+        //1. 接收参数 （类型名称、类型ID）
+        String typeName=req.getParameter("typeName");
+        String typeId=req.getParameter("typeId");
+        //2. 获取Session作用域中的user对象，得到用户ID
+        User user= (User) req.getSession().getAttribute("user");
+        //3. 调用Service层的更新方法，返回ResultInfo对象
+        ResultInfo<Integer> resultInfo =typeService.addOrUpdate(typeName,user.getUserId(),typeId);
+        //4. 将ResultInfo转换成JSON格式的字符串，响应给ajax的回调函数
+        JSONUtil.toJson(resp,resultInfo);
     }
 
     /**

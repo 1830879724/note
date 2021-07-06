@@ -65,6 +65,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <span id="msg" style="font-size:12px; color: red"></span>
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         <span class="glyphicon glyphicon-remove"></span>关闭</button>
                     <button type="button" id="btn_submit" class="btn btn-primary">

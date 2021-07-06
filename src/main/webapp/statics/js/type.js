@@ -207,7 +207,7 @@ $("#btn_submit").click(function(){
 	// 3、发送ajax请求后台，添加或修改类型记录，回调函数返回resultInfo对象
 	$.ajax({
 		type:"post",
-		url:"typeServlet",
+		url:"type",
 		data:{
 			actionName:"addOrUpdate",
 			typeId:typeId,
