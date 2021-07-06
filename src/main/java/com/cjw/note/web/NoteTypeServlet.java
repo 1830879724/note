@@ -30,8 +30,10 @@ public class NoteTypeServlet extends HttpServlet {
             //查询类型列表
             typeList(req,resp);
         }else if ("delete".equals(actionName)){
+            //删除类型
             deleteType(req,resp);
-        }else  if ("addOrUpdate".equals(actionName)){
+        }else if ("addOrUpdate".equals(actionName)){
+            //添加修改类型
             addOrUpdate(req,resp);
         }
     }

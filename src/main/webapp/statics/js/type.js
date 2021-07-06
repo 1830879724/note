@@ -73,10 +73,10 @@ function deleteType(typeId){
  */
 function deleteDom(typeId) {
 	//1、通过id属性值，得到表格对象
-	var myTable = $("#myTable").length; // 表格的子元素tr的数量
+	var myTable = $("#myTable"); // 表格的子元素tr的数量
 	//2、得到表格对象的子元素tr的数量
 	var trLength =$("myTable tr").length;
-	// 判断tr的数量是否等于2(判断是否有多条类型记录)
+	//3、判断tr的数量是否等于2(判断是否有多条类型记录)
 	if (trLength == 2) {
 		// 如果等于2，表示只有一条类型集合，删除整个表格，并设置提示内容
 		$("#myTable").remove();
@@ -115,9 +115,13 @@ function openUpdateDialog(typeId) {
 	// 2.2 得到tr的具体单元格的值
 	var typeName = tr.children().eq(1).text();
 	// 2.3 将类型名称赋值给模态框中的文本框、将类型ID赋值给模态框中的隐藏域
-	$("#typename").val(typeName);
+	$("#typeName").val(typeName);
+
+	var typeId = tr.children().eq(0).text();
 	$("#typeId").val(typeId);
-	
+
+	// 清空提示信息
+	$("#msg").html("");
 	// 3、打开模态框
 	$("#myModal").modal("show");
 	
@@ -140,168 +144,130 @@ $("#addBtn").click(function(){
 	
 	// 2、清空文本框和隐藏域的值
 	$("#typeId").val("");
-	$("#typename").val("");
-	
+	$("#typeName").val("");
+	// 清空提示信息
+	$("#msg").html("");
 	// 3、打开模态框
 	$("#myModal").modal("show");
 });
 
+
 /**
- * 打开修改模态框
- *  绑定修改按钮的点击事件
- *  	设置模态框中的类型名称文本框的id属性值，设置类型id对应的隐藏域，并执行id属性值
- * @param TypeID
+ * 添加类型 or 修改类型
+		 模态框的"保存"按钮，绑定点击事件
+		 【添加类型 或 修改类型】
+		 1. 获取参数
+			 添加操作：类型名称
+			 修改操作：类型名称、类型ID
+		 2. 判断参数是否为空（类型名称）
+			 如果为空，提示信息，并return
+		 3. 发送ajax请求后台，执行添加或修改功能，返回ResultInfo对象（通过类型ID是否为空来判断，如果为空，则为添加；如果不为空，则为修改）
+			 判断是否更新成功
+			 如果code=0，表示失败，提示用户失败
+			 如果code=1，表示成功，执行DOM操作
+		 1. 关闭模态框
+		 2. 判断类型ID是否为空
+			 如果为空，执行添加的DOM操作
+			 如果不为空，执行修改的DOM操作
  */
-function openUpdateDialog(typeId){
 
-	// 设置修改模态框的标题
-	$("#myModalLabel").html("修改类型");
-	//得到当前修改按钮对应的类型记录
-	//通过id选择器，获取当前的tr对象
-	var tr = $("#tr_"+typeId);
-	//得到tr具体的单元格的值（第二个td，下标是1）
-	var typeName =tr.children().eq(1).text();
-	//将类型名称设置给模态框中的文本框
-	$("#typeName").val(typeName);
-	//得到要修改的记录的类型id（第一个td 下标是0）;
-	var typeId = tr.children().eq(0).text();
-	//讲类型ID设置模态框中的隐藏域中
-	// 打开模态框
-	$("#myModal").modal("show");
-}
+$("#btn_submit").click(function (){
+	//1. 获取参数
+	var typeName = $("#typeName").val();
 
-
-/**
- * 添加或修改
- 	1、获取参数（文本框：类型名称、隐藏域：类型ID）
- 	2、判断参数是否为空（类型名称）
- 		如果为空，提示信息，并return
- 	3、发送ajax请求后台，添加或修改类型记录，回调函数返回resultInfo对象
- 		判断是否更新成功
- 			如果code=0，表示失败，提示信息
- 			如果code=1，表示更新成功，执行Dom操作
- 				关闭模态框
- 				判断typeId是否为空
- 					如果为空，执行添加的DOM操作
- 					// TODO 
- 					如果不为空，执行修改的DOM操作
- 						1、修改指定tr记录
- 							a、通过id选择器获取tr记录
- 							b、修改指定单元格的文本值
- 						2、左侧类型分组导航栏的列表项		
- 							给左侧类型名添加span标签，并设置id属性值，修改该span元素的文本值	
- 			
- */		
-$("#btn_submit").click(function(){
-	// 1、获取参数（文本框：类型名称、隐藏域：类型ID）
-	var typeId = $("#typeId").val();
-	var typeName = $("#typename").val();
-	
-	// 2、判断参数是否为空（类型名称）
-	if (isEmpty(typeName)) {
-		// 如果为空，提示信息，并return
-		$("#msg").html("类型名称不能为空！");
-		return;
+	//如果是修改操作则获取类型id
+	var typeId =$("#typeId").val();
+	//2. 判断参数是否为空（类型名称）
+	if (isEmpty(typeName)){
+		//如果为空，提示信息，并return
+		$("#msg").html("类型名称不能为空")
+		return ;
 	}
-	
-	// 3、发送ajax请求后台，添加或修改类型记录，回调函数返回resultInfo对象
+	// 3. 发送ajax请求后台，执行添加或修改功能，返回ResultInfo对象
 	$.ajax({
 		type:"post",
 		url:"type",
-		data:{
-			actionName:"addOrUpdate",
+		data: {
+			actionName: "addOrUpdate",
+			typeName:typeName,
 			typeId:typeId,
-			typeName:typeName
 		},
-		success:function(result){
-			console.log(result);
-			// 如果code=1，表示更新成功，执行Dom操作
-			if (result.code == 1) {
-				// 关闭模态框
+		success:function (result){
+			//判断是否更新成功
+			if (result.code==1){
+				//如果code=1，表示成功，执行DOM操作
+				// 1. 关闭模态框
 				$("#myModal").modal("hide");
-				// 判断typeId是否为空
- 				if (isEmpty(typeId)) {
- 					var key = result.result; // 后台添加记录成功后返回的主键
- 					// 如果为空，执行添加的DOM操作
- 					addDom(key,typeName);
- 				} else {
- 					// 如果不为空，执行修改的DOM操作
- 					updateDom(typeId,typeName);
- 				}
-				
-			} else {
+				// 2. 判断类型ID是否为空
+				if (isEmpty(typeId)){//为空执行添加操作
+					addDom(typeName, result.result); //
+				}else {//不为空执行修改操作
+				updateDom(typeName,typeId);
+				}
+			}else {
+				//如果code=0，表示失败，提示用户失败
 				$("#msg").html(result.msg);
 			}
 		}
-	});
-	
-});
+	})
+})
 
 /**
- * 修改类型的DOM操作
- 	1、修改指定tr记录
-		a、通过id选择器获取tr记录
-		b、修改指定单元格的文本值
-	2、左侧类型分组导航栏的列表项		
-		给左侧类型名添加span标签，并设置id属性值，修改该span元素的文本值	
- * @param typeId
+ * 修改操作
  * @param typeName
+ * @param typeId
  */
-function updateDom(typeId,typeName) {
-	/* 1、修改指定tr记录  */
-	// a、通过id选择器获取tr记录
-	var tr = $("#tr_" + typeId);
-	// b、修改指定单元格的文本值
+function updateDom(typeName,typeId){
+	//修改执行tr记录
+	//1.1通过id选择器获取tr对象
+	var tr =$("#tr_"+typeId);
+	//1.2修改tr指定的单元格的文本值
 	tr.children().eq(1).text(typeName);
-	
-	/* 2、左侧类型分组导航栏的列表项  */
-	// 给左侧类型名添加span标签，并设置id属性值，修改该span元素的文本值	
+	/* 2. 修改左侧类型分组导航栏的列表项 */
+	// 修改span元素的文本值
 	$("#sp_"+typeId).html(typeName);
-}
-
+};
 
 /**
  * 添加类型的DOM操作
- * 1、添加tr记录
-		判断表格是否存在
-			a、通过表格的id属性获取表格元素对象
-			b、判断表格对象的length是否大于0 （大于0 ，则表示表格存在；否则表格不存在）
-			c、如果表格存在，则拼接tr记录，将tr对象追加到table对象中
-			d、如果表格不存在，则拼接表格及tr对象，将表格设置到div中
-	2、左侧类型分组导航栏的列表项
-		a、给类型分组的ul元素设置id属性值  id="typeUl"
-		b、拼接li元素，追加到ul元素中
- * @param typeId
+	 1. 添加tr记录
+		 1.1. 拼接tr标签
+		 1.2. 通过id属性值，获取表格对象
+		 1.3. 判断表格对象是否存在 （长度是否大于0）
+		 1.4. 如果表格存在，将tr标签追加到表格对象中
+		 1.5. 如果表格不存在，则拼接表格及tr标签，将整个表格追加到div中
+	 2. 添加左侧类型分组导航栏的列表项
+		 2.1. 拼接li元素
+		 2.3 设置ul标签的id属性值，将li元素追加到ul中
  * @param typeName
+ * @param typeId
  */
-function addDom(typeId,typeName) {
-	/* 1、添加tr记录  */
-	// 拼接tr元素
+function addDom(typeName, typeId){
+	/* 1. 添加tr记录 */
+	// 1.1. 拼接tr标签
 	var tr = '<tr id="tr_'+typeId+'"><td>'+typeId+'</td><td>'+typeName+'</td>';
 	tr += '<td><button class="btn btn-primary" type="button" onclick="openUpdateDialog('+typeId+')">修改</button>&nbsp;';
 	tr += '<button class="btn btn-danger del" type="button" onclick="deleteType('+typeId+')">删除</button></td></tr>';
-	
-	// a、通过表格的id属性获取表格元素对象
+
+	// 1.2. 通过id属性值，获取表格对象
 	var myTable = $("#myTable");
-	// b、判断表格对象的length是否大于0 （大于0 ，则表示表格存在；否则表格不存在）
-	if (myTable.length > 0) {
-		// c、如果表格存在，则拼接tr记录，将tr对象追加到table对象中
+
+	// 1.3. 判断表格对象是否存在 （长度是否大于0）
+	if (myTable.length > 0) { // 如果length大于0，表示表格存在
+		// 1.4. 将tr标签追加到表格对象中
 		myTable.append(tr);
-	} else {
-		// d、如果表格不存在，则拼接表格及tr对象，将表格设置到div中
-		myTable = '<table class="table table-hover table-striped" id="myTable">';
+	} else { // 表示表格不存在
+		// 拼接table标签及tr标签
+		myTable = '<table id="myTable" class="table table-hover table-striped">';
 		myTable += '<tbody> <tr> <th>编号</th> <th>类型</th> <th>操作</th> </tr>';
 		myTable += tr + '</tbody></table>';
-		
+		// 追加到div中
 		$("#myDiv").html(myTable);
 	}
 
-	
-	/* 2、左侧类型分组导航栏的列表项 */
-	// 拼接li元素
-	var li = '<li id="li_'+typeId+'"><a href=""><span id="sp_'+typeId+'">'+typeName+' </span><span class="badge">0</span></a></li>';
-	// 追加到ul元素中
+	/* 2. 添加左侧类型分组导航栏的列表项  */
+	// 2.1. 拼接li元素
+	var li = '<li id="li_'+typeId+'"><a href=""><span id="sp_'+typeId+'">'+typeName+'</span> <span class="badge">0</span></a></li>';
+	// 2.3 设置ul标签的id属性值，将li元素追加到ul中
 	$("#typeUl").append(li);
 }
-
-

@@ -69,17 +69,17 @@ public class NoteTypeService {
     /**
      *添加或修改类型
              1. 判断参数是否为空 （类型名称）
-             如果为空，code=0，msg=xxx，返回ResultInfo对象
+                    如果为空，code=0，msg=xxx，返回ResultInfo对象
              2. 调用Dao层，查询当前登录用户下，类型名称是否唯一，返回0或1
-             如果不可用，code=0，msg=xxx，返回ResultInfo对象
+                    如果不可用，code=0，msg=xxx，返回ResultInfo对象
              3. 判断类型ID是否为空
-             如果为空，调用Dao层的添加方法，返回主键 （前台页面需要显示添加成功之后的类型ID）
-             如果不为空，调用Dao层的修改方法，返回受影响的行数
+                     如果为空，调用Dao层的添加方法，返回主键 （前台页面需要显示添加成功之后的类型ID）
+                     如果不为空，调用Dao层的修改方法，返回受影响的行数
              4. 判断 主键/受影响的行数 是否大于0
-             如果大于0，则更新成功
-             code=1，result=主键
-             如果不大于0，则更新失败
-             code=0，msg=xxx
+                    如果大于0，则更新成功
+                     code=1，result=主键
+                    如果不大于0，则更新失败
+                    code=0，msg=xxx
      * @param typeName
      * @param userId
      * @param typeId
@@ -91,10 +91,35 @@ public class NoteTypeService {
         if (StrUtil.isBlank(typeName)){
             resultInfo.setCode(0);
             resultInfo.setMsg("类型名称不能为空!");
-            return  resultInfo;
+            return resultInfo;
         }
         // 2. 调用Dao层，查询当前登录用户下，类型名称是否唯一，返回0或1
-
+        Integer code =typeDao.checkTypeName(typeName,userId,typeId);
+        // 如果不可用，code=0，msg=xxx，返回ResultInfo对象
+        if (code ==0){
+            resultInfo.setCode(0);
+            resultInfo.setMsg("类型名称已存在，请重新输入!");
+            return  resultInfo;
+        }
+        // 3. 判断类型ID是否为空
+        //返回的结果
+        Integer key =null;//主键或受影响的行数
+        if (StrUtil.isBlank(typeId)){
+            // 如果为空，调用Dao层的添加方法，返回主键 （前台页面需要显示添加成功之后的类型ID）
+            key =typeDao.addType(typeName,userId);
+        }else {
+            //如果不为空，调用Dao层的修改方法，返回受影响的行数
+            key=typeDao.updateType(typeName,typeId);
+        }
+        //   4. 判断 主键/受影响的行数 是否大于0
+        if (key > 0){
+            //如果大于0，则更新成功,code=1，result=主键
+            resultInfo.setCode(1);
+            resultInfo.setResult(key);
+        }else {
+            resultInfo.setCode(0);
+            resultInfo.setMsg("更新失败!");
+        }
         return  resultInfo;
     }
 }
