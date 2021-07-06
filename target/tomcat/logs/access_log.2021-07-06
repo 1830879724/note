@@ -1,0 +1,12 @@
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:52 +0800] "GET /note/type?actionName=list HTTP/1.1" 302 - http-bio-8082-exec-1 94
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:52 +0800] "GET /note/login.jsp HTTP/1.1" 200 2801 http-bio-8082-exec-3 86
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:52 +0800] "GET /note/statics/js/config.js HTTP/1.1" 304 - http-bio-8082-exec-4 17
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:54 +0800] "POST /note/user HTTP/1.1" 302 - http-bio-8082-exec-5 506
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:54 +0800] "GET /note/index HTTP/1.1" 200 7016 http-bio-8082-exec-6 36
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:54 +0800] "GET /note/%E4%B8%BB%E9%A1%B5_files/ueditor.config.js HTTP/1.1" 404 1045 http-bio-8082-exec-7 1
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:54 +0800] "GET /note/%E4%B8%BB%E9%A1%B5_files/ueditor.all.js HTTP/1.1" 404 1039 http-bio-8082-exec-2 1
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:54 +0800] "GET /note/statics/bootstrap/css/bootstrap.css.map HTTP/1.1" 200 366866 http-bio-8082-exec-8 13
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:57 +0800] "GET /note/type?actionName=list HTTP/1.1" 200 10199 http-bio-8082-exec-10 52
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:57 +0800] "GET /note/%E4%B8%BB%E9%A1%B5_files/ueditor.all.js HTTP/1.1" 404 1039 http-bio-8082-exec-9 2
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:57 +0800] "GET /note/%E4%B8%BB%E9%A1%B5_files/ueditor.config.js HTTP/1.1" 404 1045 http-bio-8082-exec-10 3
+0:0:0:0:0:0:0:1 - - [06/Jul/2021:08:46:57 +0800] "GET /note/statics/js/type.js HTTP/1.1" 304 - http-bio-8082-exec-3 15
