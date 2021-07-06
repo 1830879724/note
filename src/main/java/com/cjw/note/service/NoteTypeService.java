@@ -87,6 +87,14 @@ public class NoteTypeService {
      */
     public ResultInfo<Integer> addOrUpdate(String typeName, Integer userId, String typeId) {
         ResultInfo<Integer> resultInfo=new ResultInfo<>();
+        //1. 判断参数是否为空 （类型名称）
+        if (StrUtil.isBlank(typeName)){
+            resultInfo.setCode(0);
+            resultInfo.setMsg("类型名称不能为空!");
+            return  resultInfo;
+        }
+        // 2. 调用Dao层，查询当前登录用户下，类型名称是否唯一，返回0或1
+
         return  resultInfo;
     }
 }
