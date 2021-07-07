@@ -4,6 +4,7 @@ import com.cjw.note.po.Note;
 import com.cjw.note.po.User;
 import com.cjw.note.service.NoteService;
 import com.cjw.note.util.Page;
+import com.cjw.note.vo.NoteVo;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/index")
 public class indexServlet extends HttpServlet {
@@ -47,5 +49,13 @@ public class indexServlet extends HttpServlet {
         Page<Note> page =new NoteService().findNoteListByPage(pageNum,pageSize,user.getUserId());
         //4. 将page对象设置到request作用域中
         req.setAttribute("page",page);
+        //通过日期分组查询当前登录用户下的数量
+        List<NoteVo> dateInfo =new NoteService().findNoteCountByDate(user.getUserId());
+        //设置集合存放在作用域
+        req.getSession().setAttribute("dateInfo",dateInfo);
+        //通过类型分组查询当前登录用户下的数量
+        List<NoteVo> typeInfo =new NoteService().findNoteCountByType(user.getUserId());
+        //设置集合存放在作用域
+        req.getSession().setAttribute("typeInfo",typeInfo);
     }
 }

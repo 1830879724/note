@@ -62,10 +62,10 @@
             <div class="data_list">
                 <div class="data_list_title"><span class="glyphicon glyphicon-user"></span>&nbsp;个人中心&nbsp;&nbsp;&nbsp;&nbsp;<a href="user?actionName=logout">退出</a></div>
                 <div class="userimg">
-                    <img src="statics/images/h2.jpg">
+                    <img src="user?actionName=userHead&imageName=${user.head}">
                 </div>
-                <div class="nick">我思故我在</div>
-                <div class="mood">(以后的你会感谢现在努力的你)</div>
+                <div class="nick">${user.nick}</div>
+                <div class="mood">${user.mood}</div>
             </div>
             <div class="data_list">
                 <div class="data_list_title">
@@ -75,12 +75,13 @@
 
                 <div>
                     <ul class="nav nav-pills nav-stacked">
-
-                        <li ><a href="main?act=searchDate&amp;val=2016%E5%B9%B408%E6%9C%88&amp;valStr=2016%E5%B9%B408%E6%9C%88">2016年08月 <span class="badge">24</span></a></li>
-
-                        <li><a href="main?act=searchDate&amp;val=2016%E5%B9%B407%E6%9C%88&amp;valStr=2016%E5%B9%B407%E6%9C%88">2016年07月 <span class="badge">1</span></a></li>
-
-                        <li><a href="main?act=searchDate&amp;val=2016%E5%B9%B406%E6%9C%88&amp;valStr=2016%E5%B9%B406%E6%9C%88">2016年06月 <span class="badge">1</span></a></li>
+                    <c:forEach items="${dateInfo}" var="item">
+                        <li>
+                            <a href="index?actionName=searchDate&date=${item.groupName}月">${item.groupName}
+                            <span class="badge">${item.noteCount}</span>
+                            </a>
+                        </li>
+                    </c:forEach>
                     </ul>
                 </div>
 
@@ -93,14 +94,13 @@
 
                 <div>
                     <ul  id="typeUl" class="nav nav-pills nav-stacked">
-
-                        <li id="li_1"><a href="main?act=searchType&amp;val=5&amp;valStr=test"><span id="sp_1">test</span><span class="badge">0</span></a></li>
-
-                        <li id="li_2"><a href="main?act=searchType&amp;val=3&amp;valStr=%E5%B0%9A%E5%AD%A6%E5%A0%82%E7%AC%94%E8%AE%B0"><span id="sp_2">笔记</span><span class="badge">12</span></a></li>
-
-                        <li id="li_3"><a href="main?act=searchType&amp;val=2&amp;valStr=%E6%8A%80%E6%9C%AF"><span id="sp_3">技术</span><span class="badge">5</span></a></li>
-
-                        <li id="li_7"><a href="main?act=searchType&amp;val=4&amp;valStr=%E8%80%81%E8%A3%B4%E8%AF%AD%E5%BD%95"><span id="sp_4">语录</span><span class="badge">9</span></a></li>
+                        <c:forEach items="${typeInfo}" var="item">
+                        <li id="li_${item.typeId}">
+                            <a href=""><span id="sp_${item.typeId}">${item.groupName}</span>
+                            <span class="badge">${item.noteCount}</span>
+                             </a>
+                        </li>
+                        </c:forEach>
 
                     </ul>
                 </div>

@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.cjw.note.dao.NoteDao;
 import com.cjw.note.po.Note;
 import com.cjw.note.util.Page;
+import com.cjw.note.vo.NoteVo;
 import com.cjw.note.vo.ResultInfo;
 
 import java.util.List;
@@ -108,5 +109,23 @@ public class NoteService {
         //6. 将note集合设置到page对象中
         page.setDataList(list);
         return  page;
+    }
+
+    /**
+     * 通过日期分组查询当前登录用户下的数量
+     * @param userId
+     * @return
+     */
+    public List<NoteVo> findNoteCountByDate(Integer userId) {
+        return noteDao.findNoteCountByDate(userId);
+    }
+
+    /**
+     * 通过类型分组查询当前登录用户下的数量
+     * @param userId
+     * @return
+     */
+    public List<NoteVo> findNoteCountByType(Integer userId) {
+        return noteDao.findNoteCountByType(userId);
     }
 }

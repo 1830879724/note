@@ -1,6 +1,7 @@
 package com.cjw.note.dao;
 
 import com.cjw.note.po.Note;
+import com.cjw.note.vo.NoteVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,40 @@ public class NoteDao {
         obj.add(pageSize);
         //调用BadeDao查询方法
         List<Note> list=BaseDao.queryRows(sql,obj,Note.class);
+        return list;
+    }
+
+    /**
+     * 通过日期分组查询当前登录用户下的数量
+     * @param userId
+     * @return
+     */
+    public List<NoteVo> findNoteCountByDate(Integer userId) {
+        //定义sql语句
+        String sql ="SELECT count( 1 ) noteCount, DATE_FORMAT( pubTime, '%Y年%m月' ) groupName FROM tb_note a LEFT JOIN tb_note_type b ON a.typeId = b.typeId WHERE userId = ? " +
+                "GROUP BY DATE_FORMAT( pubTime, '%Y年%m月' ) " +
+                "ORDER BY DATE_FORMAT( pubTime, '%Y年%m月' ) DESC";
+        //设置 参数
+        List<Object> obj =new ArrayList<>();
+        obj.add(userId);
+        List<NoteVo> list =BaseDao.queryRows(sql,obj,NoteVo.class);
+        return list;
+    }
+
+    /**
+     * 通过类型分组查询当前登录用户下的数量
+     * @param userId
+     * @return
+     */
+    public List<NoteVo> findNoteCountByType(Integer userId) {
+        //定义sql语句
+        String sql = "SELECT count(noteId) noteCount, t.typeId, typeName groupName FROM tb_note n " +
+                " RIGHT JOIN tb_note_type t ON n.typeId = t.typeId WHERE userId = ? " +
+                " GROUP BY t.typeId ORDER BY COUNT(noteId) DESC ";
+        //设置 参数
+        List<Object> obj =new ArrayList<>();
+        obj.add(userId);
+        List<NoteVo> list =BaseDao.queryRows(sql,obj,NoteVo.class);
         return list;
     }
 }
