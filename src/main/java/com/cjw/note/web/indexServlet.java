@@ -23,7 +23,7 @@ public class indexServlet extends HttpServlet {
         //分页查询列表
         noteList(req,resp);
        //设置首页动态包含的页面
-        req.setAttribute("changPage","note/list.jsp");
+        req.setAttribute("changePage","note/list.jsp");
         //请求转发到index.jsp
         req.getRequestDispatcher("index.jsp").forward(req,resp);
     }

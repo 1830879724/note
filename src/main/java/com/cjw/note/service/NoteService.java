@@ -84,14 +84,14 @@ public class NoteService {
     public Page<Note> findNoteListByPage(String pageNumStr, String pageSizeStr, Integer userId) {
         // 设置分页参数的默认值
         Integer pageNum =1;//默认当前页为第一页
-        Integer pageSize=10;//默认10条
+        Integer pageSize=5;//默认5条
         //1. 参数的非空校验
-        if (StrUtil.isBlank(pageNumStr)){
+        if (!StrUtil.isBlank(pageNumStr)){
             //设置当前页
             pageNum =Integer.parseInt(pageNumStr);
         }
-        if (StrUtil.isBlank(pageSizeStr)){
-            pageSize =Integer.parseInt(pageNumStr);
+        if (!StrUtil.isBlank(pageSizeStr)){
+            pageSize =Integer.parseInt(pageSizeStr);
         }
         //2. 查询当前登录用户的云记数量，返回总记录数 （long类型）
          long  count=noteDao.findNoteCount(userId);

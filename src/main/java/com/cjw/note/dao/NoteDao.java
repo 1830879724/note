@@ -32,7 +32,7 @@ public class NoteDao {
      */
     public long findNoteCount(Integer userId) {
         //定义sql语句
-        String sql ="SELECT count( 1 ) FROM tb_note tb INNER JOIN tb_note_type t ON tb.typeId = t.userId WHERE userId =?";
+       String sql = "SELECT count(1) FROM tb_note n INNER JOIN tb_note_type t on n.typeId = t.typeId  WHERE userId = ? ";
         //设置 参数
         List<Object> obj =new ArrayList<>();
         obj.add(userId);
@@ -50,10 +50,12 @@ public class NoteDao {
      */
     public List<Note> findNoteListByPage(Integer userId, Integer index, Integer pageSize) {
         //定义sql语句
-        String sql="SELECT noteId,title,pubTime FROM tb_note tb INNER JOIN tb_note_type t ON tb.typeId = t.userId WHERE userId =?";
+        String sql = "SELECT noteId,title,pubTime FROM tb_note n INNER JOIN  tb_note_type t on n.typeId = t.typeId WHERE userId = ?  order by pubTime desc limit ?,? ";
         //设置 参数
         List<Object> obj =new ArrayList<>();
         obj.add(userId);
+        obj.add(index);
+        obj.add(pageSize);
         //调用BadeDao查询方法
         List<Note> list=BaseDao.queryRows(sql,obj,Note.class);
         return list;
