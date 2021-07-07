@@ -33,7 +33,7 @@
                                         <select id="typeId" class="form-control" name="typeId">
                                             <option value="">请选择云记类别...</option>
                                             <c:forEach var="item" items="${typeList}">
-                                                <option value="${item.typeId}">${item.typeName}</option>
+                                                <option   <c:if test="${resultInfo.result.typeId ==item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
                                             </c:forEach>
                                             <option value="2">技术</option>
 
@@ -46,7 +46,7 @@
                                     <input type="hidden" name="act" value="save">
                                     <label for="title" class="col-sm-2 control-label">标题:</label>
                                     <div class="col-sm-8">
-                                        <input class="form-control" name="title" id="title" placeholder="云记标题" value="">
+                                        <input class="form-control" name="title" id="title" placeholder="云记标题" value="${resultInfo.result.title}">
                                     </div>
                                 </div>
 
@@ -54,13 +54,13 @@
                                     <label for="title" class="col-sm-2 control-label">内容:</label>
                                     <div class="col-sm-8">
                                        <!--准备容器加载富文本编辑器-->
-                                        <textarea id="content" name="content"></textarea>
+                                        <textarea id="content" name="content">${resultInfo.result.content}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-4 col-sm-4">
                                         <input type="submit" class="btn btn-primary" onclick="return checkForm();" value="保存">
-                                       &nbsp;<span id="msg" style="font-size: 12px;color: red"></span>
+                                       &nbsp;<span id="msg" style="font-size: 12px;color: red">${resultInfo.msg}</span>
                                     </div>
                                 </div>
                             </form>

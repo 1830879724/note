@@ -3,7 +3,9 @@ package com.cjw.note.web;
 import com.cjw.note.po.Note;
 import com.cjw.note.po.NoteType;
 import com.cjw.note.po.User;
+import com.cjw.note.service.NoteService;
 import com.cjw.note.service.NoteTypeService;
+import com.cjw.note.vo.ResultInfo;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +18,9 @@ import java.util.List;
 @WebServlet("/note")
 public class NoteServlet  extends HttpServlet {
 
+
+    private NoteService noteService=new NoteService();
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //设置首页导航高亮
@@ -26,6 +31,40 @@ public class NoteServlet  extends HttpServlet {
         if ("view".equals(actionName)){
             //进入发布云记页面
             noteView(req,resp);
+        }else if ("addOrUpdate".equals(actionName)){
+            //添加或修改
+            addOrUpdate(req,resp);
+        }
+    }
+
+    /**
+     * 添加或修改
+             1. 接收参数 （类型ID、标题、内容）
+             2. 调用Service层方法，返回resultInfo对象
+             3. 判断resultInfo的code值
+                如果code=1，表示成功
+                     重定向跳转到首页 index
+                如果code=0，表示失败
+                     将resultInfo对象设置到request作用域
+                     请求转发跳转到note?actionName=view
+     * @param req
+     * @param resp
+     */
+    private void addOrUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        // 1. 接收参数 （类型ID、标题、内容）
+        String typeId=req.getParameter("typeId");
+        String title=req.getParameter("title");
+        String content=req.getParameter("content");
+        //2. 调用Service层方法，返回resultInfo对象
+        ResultInfo<Note> resultInfo =noteService.addOrUpdate(typeId,title,content);
+        //3. 判断resultInfo的code值
+        if (resultInfo.getCode() ==1){
+            resp.sendRedirect("index");
+        }else {
+            //将resultInfo 对象设置到req作用域
+            req.setAttribute("resultInfo",resultInfo);
+            //请求转发跳转到note?actionName=view
+            req.getRequestDispatcher("note?actionName=view").forward(req,resp);
         }
     }
 
