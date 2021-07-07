@@ -3,7 +3,10 @@ package com.cjw.note.service;
 import cn.hutool.core.util.StrUtil;
 import com.cjw.note.dao.NoteDao;
 import com.cjw.note.po.Note;
+import com.cjw.note.util.Page;
 import com.cjw.note.vo.ResultInfo;
+
+import java.util.List;
 
 public class NoteService {
 
@@ -61,5 +64,49 @@ public class NoteService {
             resultInfo.setMsg("更新失败!");
         }
         return resultInfo;
+    }
+
+    /**
+     * 分页列表查询
+             1. 参数的非空校验
+                如果分页参数为空，则设置默认值
+             2. 查询当前登录用户的云记数量，返回总记录数 （long类型）
+             3. 判断总记录数是否大于0
+             4. 如果总记录数大于0，调用Page类的带参构造，得到其他分页参数的值，返回Page对象
+             5. 查询当前登录用户下当前页的数据列表，返回note集合
+             6. 将note集合设置到page对象中
+             7. 返回Page对象
+     * @param pageNumStr
+     * @param pageSizeStr
+     * @param userId
+     * @return
+     */
+    public Page<Note> findNoteListByPage(String pageNumStr, String pageSizeStr, Integer userId) {
+        // 设置分页参数的默认值
+        Integer pageNum =1;//默认当前页为第一页
+        Integer pageSize=10;//默认10条
+        //1. 参数的非空校验
+        if (StrUtil.isBlank(pageNumStr)){
+            //设置当前页
+            pageNum =Integer.parseInt(pageNumStr);
+        }
+        if (StrUtil.isBlank(pageSizeStr)){
+            pageSize =Integer.parseInt(pageNumStr);
+        }
+        //2. 查询当前登录用户的云记数量，返回总记录数 （long类型）
+         long  count=noteDao.findNoteCount(userId);
+        //3. 判断总记录数是否大于0
+        if (count  < 1){
+            return null;
+        }
+        //得到数据库中分页查询的开始下标
+        Integer index=(pageNum -1) * pageSize;
+        // 4. 如果总记录数大于0，调用Page类的带参构造，得到其他分页参数的值，返回Page对象
+        Page<Note> page = new Page<>(pageNum,pageSize,count);
+        //  5. 查询当前登录用户下当前页的数据列表，返回note集合
+        List<Note> list =noteDao.findNoteListByPage(userId,index,pageSize);
+        //6. 将note集合设置到page对象中
+        page.setDataList(list);
+        return  page;
     }
 }
