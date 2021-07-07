@@ -12,9 +12,9 @@
     <script src="statics/sweetalert/sweetalert2.min.js"></script>
     <script src="statics/js/util.js"></script>
     <!-- 配置文件 -->
-    <script type="text/javascript" src="./主页_files/ueditor.config.js"></script>
+    <script type="text/javascript" src="statics/ueditor/ueditor.config.js"></script>
     <!-- 编辑器源码文件 -->
-    <script type="text/javascript" src="./主页_files/ueditor.all.js"></script>
+    <script type="text/javascript" src="statics/ueditor/ueditor.all.js"></script>
     <style type="text/css">
         body {
             padding-top: 60px;

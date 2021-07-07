@@ -49,6 +49,11 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label for="title" class="col-sm-2 control-label">内容:</label>
+                                    <div class="col-sm-8">
+                                       <!--准备容器加载富文本编辑器-->
+                                        <textarea id="content" name="content"></textarea>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-4 col-sm-4">
@@ -63,18 +68,17 @@
                 </div>
             </div>
         </div>
+    </div>
         <script>
-            $(function(){
-                    //UE.getEditor('noteEditor');
-                    var editor = new UE.ui.Editor({initialFrameHeight:'100%',initialFrameWidth:'100%'});
-                    editor.render("noteEditor");
-                }
-            );
-            //验证
-            function saveNote(){
-                //验证非空
-
-                return true;
-            }
+            // $(function(){
+            //         //UE.getEditor('noteEditor');
+            //         var editor = new UE.ui.Editor({initialFrameHeight:'100%',initialFrameWidth:'100%'});
+            //         editor.render("noteEditor");
+            //     }
+            // );
+            $(function (){
+                //加载富文本编辑器
+                var ue = UE.getEditor('content');
+            })
         </script>
 
