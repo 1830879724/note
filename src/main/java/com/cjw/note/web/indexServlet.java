@@ -24,6 +24,8 @@ public class indexServlet extends HttpServlet {
         req.setAttribute("menu_page","index");
         //得到用户行为 判断 是什么条件查询(标题，类型，日期)模糊查询
         String actionName =req.getParameter("actionName");
+        //将用户行为设置到作用域中（分页导航中需要获取）
+        req.setAttribute("action",actionName);
         //得到用户行为
         if ("searchTitle".equals(actionName)){//标题查询
             String title =req.getParameter("title");

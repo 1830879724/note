@@ -38,19 +38,21 @@
                 <!--如果当前不是第一页则显示上一页的按钮-->
                 <c:if test="${page.pageNum >1}">
                 <li>
-                    <a href="index?pageNum=${page.prePage}"><span>《</span></a>
+                    <a href="index?pageNum=${page.prePage}&actionName=${action}&title=${title}&date=${date}&typeId=${typeId}">
+                        <span>《</span></a>
                 </li>
                 </c:if>
                 <c:forEach begin="${page.startNavPage}" end="${page.endNavPage}" var="p">
                     <li <c:if test="${page.pageNum == p}">class="active"
                 </c:if> >
-                    <a href="index?pageNum=${p}">${p}</a>
+                    <a href="index?pageNum=${p}&actionName=${action}&title=${title}&date=${date}&typeId=${typeId}">${p}</a>
                     </li>
                 </c:forEach>
                 <!--如果当前不是最后一页则显示下一页的按钮-->
                 <c:if test="${page.pageNum < page.totalPages}">
                 <li>
-                    <a href="index?pageNum=${page.nextPage}"> <span>》</span></a>
+                    <a href="index?pageNum=${page.nextPage}&actionName=${action}&title=${title}&date=${date}&typeId=${typeId}">
+                        <span>》</span></a>
                 </li>
                 </c:if>
             </ul>
