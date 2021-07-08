@@ -137,4 +137,19 @@ public class NoteDao {
         List<NoteVo> list =BaseDao.queryRows(sql,obj,NoteVo.class);
         return list;
     }
+
+    /**
+     * 通过id查询对象
+     * @param noteId
+     * @return
+     */
+    public Note findNoteById(String noteId) {
+        //定义sql语句
+        String sql ="select * from tb_note where noteId=?";
+        //设置 参数
+        List<Object> obj =new ArrayList<>();
+        obj.add(noteId);
+        Note note= (Note) BaseDao.queryRow(sql,obj,Note.class);
+        return note;
+    }
 }

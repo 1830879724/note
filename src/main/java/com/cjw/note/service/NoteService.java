@@ -129,4 +129,23 @@ public class NoteService {
     public List<NoteVo> findNoteCountByType(Integer userId) {
         return noteDao.findNoteCountByType(userId);
     }
+
+    /**
+     * 查询云记详情
+         1. 参数的非空判断
+         2. 调用Dao层的查询，通过noteId查询note对象
+         3. 返回note对象
+     * @param noteId
+     * @return
+     */
+    public Note findNoteById(String noteId) {
+        // 1. 参数的非空判断
+        if (StrUtil.isBlank(noteId)){
+            return null;
+        }
+        //2. 调用Dao层的查询，通过noteId查询note对象
+        Note note =noteDao.findNoteById(noteId);
+        //3. 返回note对象
+        return note;
+    }
 }

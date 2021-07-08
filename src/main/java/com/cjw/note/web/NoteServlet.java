@@ -34,7 +34,33 @@ public class NoteServlet  extends HttpServlet {
         }else if ("addOrUpdate".equals(actionName)){
             //添加或修改
             addOrUpdate(req,resp);
+        }else if ("detail".equals(actionName)){
+            //查询云记详情
+            noteDetail(req,resp);
         }
+    }
+
+    /**
+     * 查询云记详情
+             1. 接收参数 （noteId）
+             2. 调用Service层的查询方法，返回Note对象
+             3. 将Note对象设置到request请求域中
+             4. 设置首页动态包含的页面值
+             5. 请求转发跳转到index.jsp
+     * @param req
+     * @param resp
+     */
+    private void noteDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //1. 接收参数 （noteId）
+        String noteId=req.getParameter("noteId");
+        // 2. 调用Service层的查询方法，返回Note对象
+        Note note =noteService.findNoteById(noteId);
+        // 3. 将Note对象设置到request请求域中
+        req.setAttribute("note",note);
+        //4. 设置首页动态包含的页面值
+        req.setAttribute("changePage","note/detail.jsp");
+        //5. 请求转发跳转到index.jsp
+        req.getRequestDispatcher("index.jsp").forward(req,resp);
     }
 
     /**
