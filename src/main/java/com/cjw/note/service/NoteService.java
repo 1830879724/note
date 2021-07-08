@@ -31,7 +31,7 @@ public class NoteService {
      * @param content
      * @return
      */
-    public ResultInfo<Note> addOrUpdate(String typeId, String title, String content,String noteId) {
+    public ResultInfo<Note> addOrUpdate(String typeId, String title, String content,String noteId, String lon,String lat) {
         ResultInfo<Note> resultInfo =new ResultInfo<>();
 
         // 1. 参数的非空判断
@@ -50,11 +50,19 @@ public class NoteService {
             resultInfo.setMsg("内容不能为空");
             return resultInfo;
         }
+        //设置经纬度的默认值=北京 116.404, 39.915
+        if (lon ==null || lat ==null){
+            lon="116.404";
+            lat="39.915";
+        }
         //2、设置回显对象
         Note note=new Note();
         note.setTitle(title);
         note.setContent(content);
         note.setTypeId(Integer.parseInt(typeId));
+        note.setLon(Float.parseFloat(lon));
+        note.setLat(Float.parseFloat(lat));
+
         //判断云记id是否为空
         if (!StrUtil.isBlank(noteId)){
             note.setNoteId(Integer.parseInt(noteId));

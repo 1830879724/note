@@ -103,10 +103,13 @@ public class NoteServlet  extends HttpServlet {
         String typeId=req.getParameter("typeId");
         String title=req.getParameter("title");
         String content=req.getParameter("content");
+        //获取经纬度
+        String lon =req.getParameter("lon");
+        String lat =req.getParameter("lat");
         //如果是修改操作接收noteId
         String noteId =req.getParameter("noteId");
         //2. 调用Service层方法，返回resultInfo对象
-        ResultInfo<Note> resultInfo =noteService.addOrUpdate(typeId,title,content,noteId);
+        ResultInfo<Note> resultInfo =noteService.addOrUpdate(typeId,title,content,noteId,lon,lat);
         //3. 判断resultInfo的code值
         if (resultInfo.getCode() ==1){
             resp.sendRedirect("index");

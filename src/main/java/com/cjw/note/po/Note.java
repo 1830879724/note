@@ -15,5 +15,7 @@ public class Note {
     private Integer typeId;//云记类型ID
     private Date pubTime;//发布时间
     private String typeName;//类型名称
+    private  Float lon;//经度
+    private Float lat;//维度
 
 }

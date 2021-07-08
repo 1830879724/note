@@ -25,7 +25,9 @@ public class NoteDao {
 
         //判断noteId是否为空，为空则添加 不为空为修改
         if (note.getNoteId()==null){//修改操作
-            sql="insert into tb_note(typeId,title,content,pubTime) values (?,?,?,null)";
+            sql="insert into tb_note(typeId,title,content,pubTime,lon,lat) values (?,?,?,now(),?,?)";
+            obj.add(note.getLon());
+            obj.add(note.getLat());
         } else {
             sql="update tb_note set typeId= ?,title=?,content= ? where noteId =?";
             obj.add(note.getNoteId());
