@@ -80,9 +80,10 @@ public class NoteService {
      * @param pageNumStr
      * @param pageSizeStr
      * @param userId
+     * @param title
      * @return
      */
-    public Page<Note> findNoteListByPage(String pageNumStr, String pageSizeStr, Integer userId) {
+    public Page<Note> findNoteListByPage(String pageNumStr, String pageSizeStr, Integer userId, String title) {
         // 设置分页参数的默认值
         Integer pageNum =1;//默认当前页为第一页
         Integer pageSize=5;//默认5条
@@ -95,7 +96,7 @@ public class NoteService {
             pageSize =Integer.parseInt(pageSizeStr);
         }
         //2. 查询当前登录用户的云记数量，返回总记录数 （long类型）
-         long  count=noteDao.findNoteCount(userId);
+         long  count=noteDao.findNoteCount(userId,title);
         //3. 判断总记录数是否大于0
         if (count  < 1){
             return null;
@@ -105,7 +106,7 @@ public class NoteService {
         // 4. 如果总记录数大于0，调用Page类的带参构造，得到其他分页参数的值，返回Page对象
         Page<Note> page = new Page<>(pageNum,pageSize,count);
         //  5. 查询当前登录用户下当前页的数据列表，返回note集合
-        List<Note> list =noteDao.findNoteListByPage(userId,index,pageSize);
+        List<Note> list =noteDao.findNoteListByPage(userId,index,pageSize,title);
         //6. 将note集合设置到page对象中
         page.setDataList(list);
         return  page;

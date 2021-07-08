@@ -1,5 +1,6 @@
 package com.cjw.note.dao;
 
+import cn.hutool.core.util.StrUtil;
 import com.cjw.note.po.Note;
 import com.cjw.note.vo.NoteVo;
 
@@ -29,14 +30,22 @@ public class NoteDao {
     /**
      * 查询当前用户的数量，返回总数量
      * @param userId
+     * @param title
      * @return
      */
-    public long findNoteCount(Integer userId) {
+    public long findNoteCount(Integer userId, String title) {
         //定义sql语句
        String sql = "SELECT count(1) FROM tb_note n INNER JOIN tb_note_type t on n.typeId = t.typeId  WHERE userId = ? ";
         //设置 参数
         List<Object> obj =new ArrayList<>();
         obj.add(userId);
+        //判断条件查询的参数是否为空 则拼接sql语句并设置相关参数
+        if (!StrUtil.isBlank(title)){
+            //拼接sql语句
+            sql += "and title like concat('%',?,'%')";
+            //设置相关参数
+            obj.add(title);
+        }
         //调用BadeDao查询方法
         long count = (long) BaseDao.findSingLeValue(sql,obj);
         return count;
@@ -47,16 +56,27 @@ public class NoteDao {
      * @param userId
      * @param index
      * @param pageSize
+     * @param title
      * @return
      */
-    public List<Note> findNoteListByPage(Integer userId, Integer index, Integer pageSize) {
+    public List<Note> findNoteListByPage(Integer userId, Integer index, Integer pageSize, String title) {
         //定义sql语句
-        String sql = "SELECT noteId,title,pubTime FROM tb_note n INNER JOIN  tb_note_type t on n.typeId = t.typeId WHERE userId = ?  order by pubTime desc limit ?,? ";
+        String sql = "SELECT noteId,title,pubTime FROM tb_note n INNER JOIN  tb_note_type t on n.typeId = t.typeId WHERE userId = ?";
         //设置 参数
         List<Object> obj =new ArrayList<>();
         obj.add(userId);
+        //判断条件查询的参数是否为空 则拼接sql语句并设置相关参数
+        if (!StrUtil.isBlank(title)){
+            //拼接sql语句
+            sql += " and title like concat('%',?,'%')";
+            //设置相关参数
+            obj.add(title);
+        }
+        //拼接分页的sql语句
+        sql += " limit ?,?";
         obj.add(index);
         obj.add(pageSize);
+
         //调用BadeDao查询方法
         List<Note> list=BaseDao.queryRows(sql,obj,Note.class);
         return list;

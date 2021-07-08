@@ -21,9 +21,20 @@ public class indexServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //设置首页导航高亮
         req.setAttribute("menu_page","index");
+        //得到用户行为 判断 是什么条件查询(标题，类型，日期)模糊查询
+        String actionName =req.getParameter("actionName");
+        //得到用户行为
+        if ("searchTitle".equals(actionName)){
+            String title =req.getParameter("title");
+            //将查询条件设置到请求域中查询回显
+            req.setAttribute("title",title);
+            noteList(req,resp,title);
+        }else {
+            //分页查询列表
+            noteList(req,resp,null);
+        }
 
-        //分页查询列表
-        noteList(req,resp);
+
        //设置首页动态包含的页面
         req.setAttribute("changePage","note/list.jsp");
         //请求转发到index.jsp
@@ -38,15 +49,16 @@ public class indexServlet extends HttpServlet {
              4. 将page对象设置到request作用域中
      * @param req
      * @param resp
+     * @param title
      */
-    private void noteList(HttpServletRequest req, HttpServletResponse resp) {
+    private void noteList(HttpServletRequest req, HttpServletResponse resp, String title) {
         // 1. 接收参数 （当前页、每页显示的数量）
         String pageNum=req.getParameter("pageNum");
         String pageSize=req.getParameter("pageSize");
         //2. 获取Session作用域中的user对象
         User user = (User) req.getSession().getAttribute("user");
         // 3. 调用Service层查询方法，返回Page对象
-        Page<Note> page =new NoteService().findNoteListByPage(pageNum,pageSize,user.getUserId());
+        Page<Note> page =new NoteService().findNoteListByPage(pageNum,pageSize,user.getUserId(),title);
         //4. 将page对象设置到request作用域中
         req.setAttribute("page",page);
         //通过日期分组查询当前登录用户下的数量
