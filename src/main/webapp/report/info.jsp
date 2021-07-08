@@ -13,9 +13,11 @@
             <div class="row" style="padding-top: 20px;">
                 <div class="col-md-12">
                 <%-- 柱状图容器--%>
-                <div id="monthChart" style="height: 500px">
-
-                </div>
+                <div id="monthChart" style="height: 500px"></div>
+                    <%--百度地图加载--%>
+                    <h3 align="center">用户地区分布图</h3>
+                    <%--加载百度地图容器--%>
+                    <div id="baiduMap" style="height: 600px;width: 100%;"></div>
                 </div>
             </div>
         </div>
@@ -24,6 +26,8 @@
 <%----%>
 
 <script type="text/javascript" src="statics/echarts/echarts.min.js"></script>
+<%--引用百度地图API文件--%>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&&type=webgl&ak=3yArCy8oCvYeVn5MliAAiSaomaLExP94"></script>
 <script type="text/javascript">
     /**
      * 通过月份查询云记数量
@@ -130,4 +134,27 @@
              // 使用刚指定的配置项和数据显示图表。
              myChart.setOption(option);
  }
+
+    loadBaiduMap();
+    /**
+     * 加载百度地图
+     */
+    function loadBaiduMap(){
+        var map = new BMapGL.Map("baiduMap");
+        var point = new BMapGL.Point(116.404, 39.915);
+        map.centerAndZoom(point, 15);
+        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+        var zoomCtrl = new BMapGL.ZoomControl();  // 添加比例尺控件
+        map.addControl(zoomCtrl);
+        // 创建点标记
+        var marker1 = new BMapGL.Marker(new BMapGL.Point(116.404, 39.925));
+        var marker2 = new BMapGL.Marker(new BMapGL.Point(116.404, 39.915));
+        var marker3 = new BMapGL.Marker(new BMapGL.Point(116.395, 39.935));
+        var marker4 = new BMapGL.Marker(new BMapGL.Point(116.415, 39.931));
+        // 在地图上添加点标记
+        map.addOverlay(marker1);
+        map.addOverlay(marker2);
+        map.addOverlay(marker3);
+        map.addOverlay(marker4);
+    }
 </script>
