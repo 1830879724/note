@@ -33,7 +33,7 @@ public class NoteDao {
      * @param title
      * @return
      */
-    public long findNoteCount(Integer userId, String title) {
+    public long findNoteCount(Integer userId, String title,String date,String TypeId) {
         //定义sql语句
        String sql = "SELECT count(1) FROM tb_note n INNER JOIN tb_note_type t on n.typeId = t.typeId  WHERE userId = ? ";
         //设置 参数
@@ -42,10 +42,22 @@ public class NoteDao {
         //判断条件查询的参数是否为空 则拼接sql语句并设置相关参数
         if (!StrUtil.isBlank(title)){
             //拼接sql语句
-            sql += "and title like concat('%',?,'%')";
+            sql += " and title like concat('%',?,'%')";
             //设置相关参数
             obj.add(title);
+        }else  if (!StrUtil.isBlank(date)){
+            //拼接sql语句
+            sql += " and date_format(pubTime,'%Y年%m月') = ? ";
+            //设置相关参数
+            obj.add(date);
         }
+        else  if (!StrUtil.isBlank(TypeId)){
+            //拼接sql语句
+            sql += " and n.typeId = ? ";
+            //设置相关参数
+            obj.add(TypeId);
+        }
+
         //调用BadeDao查询方法
         long count = (long) BaseDao.findSingLeValue(sql,obj);
         return count;
@@ -59,7 +71,7 @@ public class NoteDao {
      * @param title
      * @return
      */
-    public List<Note> findNoteListByPage(Integer userId, Integer index, Integer pageSize, String title) {
+    public List<Note> findNoteListByPage(Integer userId, Integer index, Integer pageSize, String title,String date,String TypeId) {
         //定义sql语句
         String sql = "SELECT noteId,title,pubTime FROM tb_note n INNER JOIN  tb_note_type t on n.typeId = t.typeId WHERE userId = ?";
         //设置 参数
@@ -71,6 +83,16 @@ public class NoteDao {
             sql += " and title like concat('%',?,'%')";
             //设置相关参数
             obj.add(title);
+        }else if (!StrUtil.isBlank(date)){
+            //拼接sql语句
+            sql += " and date_format(pubTime,'%Y年%m月') = ? ";
+            //设置相关参数
+            obj.add(date);
+        }else  if (!StrUtil.isBlank(TypeId)){
+            //拼接sql语句
+            sql += " and n.typeId = ? ";
+            //设置相关参数
+            obj.add(TypeId);
         }
         //拼接分页的sql语句
         sql += " limit ?,?";

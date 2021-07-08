@@ -72,12 +72,11 @@
 					<span class="glyphicon glyphicon-calendar">
 					</span>&nbsp;云记日期
                 </div>
-
                 <div>
                     <ul class="nav nav-pills nav-stacked">
                     <c:forEach items="${dateInfo}" var="item">
                         <li>
-                            <a href="index?actionName=searchDate&date=${item.groupName}月">${item.groupName}
+                            <a href="index?actionName=searchDate&date=${item.groupName}">${item.groupName}
                             <span class="badge">${item.noteCount}</span>
                             </a>
                         </li>
@@ -96,7 +95,7 @@
                     <ul  id="typeUl" class="nav nav-pills nav-stacked">
                         <c:forEach items="${typeInfo}" var="item">
                         <li id="li_${item.typeId}">
-                            <a href=""><span id="sp_${item.typeId}">${item.groupName}</span>
+                            <a href="index?actionName=searchType&TypeId=${item.typeId}"><span id="sp_${item.typeId}">${item.groupName}</span>
                             <span class="badge">${item.noteCount}</span>
                              </a>
                         </li>
