@@ -28,36 +28,42 @@
             </div>
             <div class="note_btn">
                 <button class="btn btn-primary" type="button" onclick="update(${note.noteId})">修改</button>
-                <button class="btn btn-danger" type="button" onclick="del(${note.noteId})">删除</button>
+                <button class="btn btn-danger" type="button" onclick="deleteNote(${note.noteId})">删除</button>
             </div>
-
-
-
         </div>
-
-
     </div>
-
-    <script>
-        function update(data){
-            window.location="note?noteId="+data;
-        }
-
-        function del(data){
-            //使用sweet-alert
-            swal({title: "删除提示",   //弹出框的title
-                text: "确定删除吗？",  //弹出框里面的提示文本
-                type: "warning",    //弹出框类型
-                showCancelButton: true, //是否显示取消按钮
-                confirmButtonColor: "#DD6B55",//确定按钮颜色
-                cancelButtonText: "取消",//取消按钮文本
-                confirmButtonText: "是的，确定删除！"//确定按钮上面的文档
-            }).then(function(isConfirm) {
-                if (isConfirm === true) {
-                    window.location="note?act=del&noteId="+data;
+    <script type="text/javascript">
+     function  deleteNote(noteId){
+         swal({
+             title: "",  // 标题
+             text: "<h3>您确认要删除该记录吗？</h3>", // 内容
+             type: "warning", // 图标  error	  success	info  warning
+             showCancelButton: true,  // 是否显示取消按钮
+             confirmButtonColor: "orange", // 确认按钮的颜色
+             confirmButtonText: "确定", // 确认按钮的文本
+             cancelButtonText: "取消" // 取消按钮的文本
+         }).then(function(){
+             // 如果是，发送ajax请求后台（类型ID）
+            $.ajax({
+                type:"post",
+                url: "note",
+                data:{
+                    actionName:"delete",
+                    typeId:noteId,
+                },
+                success:function(code){
+                    // 判断是否删除成功
+                    if (code == 1) {
+                        // 成功跳转到首页
+                        window.location.href="index";
+                    } else {
+                        // 提示用户失败   swal("标题","内容","图标")
+                        swal("","<h3>删除失败!</h3>","error");
+                    }
                 }
-            });
-        }
-    </script>
 
+            })
+         });
+     }
+    </script>
 </div>
