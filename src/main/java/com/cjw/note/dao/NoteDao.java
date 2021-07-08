@@ -103,7 +103,7 @@ public class NoteDao {
             obj.add(TypeId);
         }
         //拼接分页的sql语句
-        sql += "order by pubTime desc limit ?,?";
+        sql += " order by pubTime desc limit ?,?";
         obj.add(index);
         obj.add(pageSize);
 
@@ -119,7 +119,7 @@ public class NoteDao {
      */
     public List<NoteVo> findNoteCountByDate(Integer userId) {
         //定义sql语句
-        String sql ="SELECT count( 1 ) noteCount, DATE_FORMAT( pubTime, '%Y年%m月' ) groupName FROM tb_note a LEFT JOIN tb_note_type b ON a.typeId = b.typeId WHERE userId = ? " +
+        String sql ="SELECT count(1) noteCount, DATE_FORMAT( pubTime, '%Y年%m月') groupName FROM tb_note a LEFT JOIN tb_note_type b ON a.typeId = b.typeId WHERE userId = ? " +
                 "GROUP BY DATE_FORMAT( pubTime, '%Y年%m月' ) " +
                 "ORDER BY DATE_FORMAT( pubTime, '%Y年%m月' ) DESC";
         //设置 参数

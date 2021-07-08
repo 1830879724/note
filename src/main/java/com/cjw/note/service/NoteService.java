@@ -7,7 +7,10 @@ import com.cjw.note.util.Page;
 import com.cjw.note.vo.NoteVo;
 import com.cjw.note.vo.ResultInfo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NoteService {
 
@@ -174,5 +177,37 @@ public class NoteService {
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * 通过月份查询数量
+     * @param userId
+     * @return
+     */
+    public ResultInfo<Map<String, Object>> queryNoteMonth(Integer userId) {
+        ResultInfo<Map<String, Object>> resultInfo =new ResultInfo<>();
+        //通过月份分类查询数量
+        List<NoteVo> noteVos =noteDao.findNoteCountByDate(userId);
+        //判断集合是否存在
+        if (noteVos!=null && noteVos .size()>0){
+            //得到月份
+            List<String> monthList=new ArrayList<>();
+            //得到云记集合
+            List<Integer> noteCountList=new ArrayList<>();
+            //遍历月份分组集合
+            for (NoteVo noteVo : noteVos){
+                monthList.add(noteVo.getGroupName());
+                noteCountList.add((int) noteVo.getNoteCount());
+            }
+            //准备map对象封装对应的月份与数量
+            Map<String,Object> map=new HashMap<>();
+            map.put("monthArray",monthList);
+            map.put("dataArray",noteCountList);
+            //将map1对象设置到ResultInfo中
+            resultInfo.setCode(1);
+            resultInfo.setResult(map);
+
+        }
+        return resultInfo;
     }
 }
