@@ -27,7 +27,7 @@
                 <p>${note.content}</p>
             </div>
             <div class="note_btn">
-                <button class="btn btn-primary" type="button" onclick="update(${note.noteId})">修改</button>
+                <button class="btn btn-primary" type="button" onclick="updateNote(${note.noteId})">修改</button>
                 <button class="btn btn-danger" type="button" onclick="deleteNote(${note.noteId})">删除</button>
             </div>
         </div>
@@ -64,6 +64,15 @@
 
             })
          });
+
+     }
+
+     /**
+      * 进入发布云记的页面
+      * @param noteId
+      */
+     function updateNote(noteId){
+         window.location.href="note?actionName=view&noteId=" + noteId;
      }
     </script>
 </div>

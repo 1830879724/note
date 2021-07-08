@@ -12,7 +12,13 @@
 
         <div class="data_list">
             <div class="data_list_title">
-                <span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;修改云记
+                <span class="glyphicon glyphicon-cloud-upload"></span>&nbsp;
+                <c:if test="${empty noteInfo}">
+                    发布云记
+                </c:if>
+                <c:if test="${!empty noteInfo}">
+                    修改云记
+                </c:if>
             </div>
             <div class="container-fluid">
                 <div class="container-fluid">
@@ -27,13 +33,23 @@
                             <form class="form-horizontal" method="post" action="note">
                                 <%--设置隐藏域用来存放用户行为的actionName--%>
                                 <input type="hidden" name="actionName" value="addOrUpdate">
+                                    <!--存放隐藏域-->
+                                    <input type="hidden" name="noteId" value="${noteInfo.noteId}">
                                 <div class="form-group">
                                     <label for="typeId" class="col-sm-2 control-label">类别:</label>
                                     <div class="col-sm-8">
                                         <select id="typeId" class="form-control" name="typeId">
                                             <option value="">请选择云记类别...</option>
                                             <c:forEach var="item" items="${typeList}">
-                                                <option   <c:if test="${resultInfo.result.typeId ==item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
+                                                <c:choose>
+                                                    <c:when test="${!empty resultInfo}">
+                                                        <option   <c:if test="${resultInfo.result.typeId ==item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option   <c:if test="${noteInfo.typeId ==item.typeId}">selected</c:if> value="${item.typeId}">${item.typeName}</option>
+                                                    </c:otherwise>
+                                                </c:choose>
+
                                             </c:forEach>
                                             <option value="2">技术</option>
 
@@ -46,15 +62,32 @@
                                     <input type="hidden" name="act" value="save">
                                     <label for="title" class="col-sm-2 control-label">标题:</label>
                                     <div class="col-sm-8">
-                                        <input class="form-control" name="title" id="title" placeholder="云记标题" value="${resultInfo.result.title}">
+                                        <c:choose>
+                                            <c:when test="${!empty resultInfo}">
+                                                <input class="form-control" name="title" id="title" placeholder="云记标题" value="${resultInfo.result.title}">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input class="form-control" name="title" id="title" placeholder="云记标题" value="${noteInfo.title}">
+                                            </c:otherwise>
+                                        </c:choose>
+
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="title" class="col-sm-2 control-label">内容:</label>
                                     <div class="col-sm-8">
-                                       <!--准备容器加载富文本编辑器-->
-                                        <textarea id="content" name="content">${resultInfo.result.content}</textarea>
+                                        <c:choose>
+                                            <c:when test="${!empty resultInfo}">
+                                                <!--准备容器加载富文本编辑器-->
+                                                <textarea id="content" name="content">${resultInfo.result.content}</textarea>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <!--准备容器加载富文本编辑器-->
+                                                <textarea id="content" name="content">${noteInfo.content}</textarea>
+                                            </c:otherwise>
+                                        </c:choose>
+
                                     </div>
                                 </div>
                                 <div class="form-group">

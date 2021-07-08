@@ -28,7 +28,7 @@ public class NoteService {
      * @param content
      * @return
      */
-    public ResultInfo<Note> addOrUpdate(String typeId, String title, String content) {
+    public ResultInfo<Note> addOrUpdate(String typeId, String title, String content,String noteId) {
         ResultInfo<Note> resultInfo =new ResultInfo<>();
 
         // 1. 参数的非空判断
@@ -52,6 +52,10 @@ public class NoteService {
         note.setTitle(title);
         note.setContent(content);
         note.setTypeId(Integer.parseInt(typeId));
+        //判断云记id是否为空
+        if (!StrUtil.isBlank(noteId)){
+            note.setNoteId(Integer.parseInt(noteId));
+        }
         resultInfo.setResult(note);
         //3、 调用Dao层，添加云记记录，返回受影响的行数
         int row =noteDao.addOrUpdate(note);

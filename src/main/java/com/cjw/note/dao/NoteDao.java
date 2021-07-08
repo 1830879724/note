@@ -16,12 +16,20 @@ public class NoteDao {
      */
     public int addOrUpdate(Note note) {
         //定义sql语句
-        String sql ="insert into tb_note(typeId,title,content,pubTime) values (?,?,?,null)";
+        String sql ="";
         //设置参数
         List<Object> obj =new ArrayList<>();
         obj.add(note.getTypeId());
         obj.add(note.getTitle());
         obj.add(note.getContent());
+
+        //判断noteId是否为空，为空则添加 不为空为修改
+        if (note.getNoteId()==null){//修改操作
+            sql="insert into tb_note(typeId,title,content,pubTime) values (?,?,?,null)";
+        } else {
+            sql="update tb_note set typeId= ?,title=?,content= ? where noteId =?";
+            obj.add(note.getNoteId());
+        }
         //调用BaseDao更新方法
         int row =BaseDao.executeUpdate(sql,obj);
         return  row;
@@ -95,7 +103,7 @@ public class NoteDao {
             obj.add(TypeId);
         }
         //拼接分页的sql语句
-        sql += " limit ?,?";
+        sql += "order by pubTime desc limit ?,?";
         obj.add(index);
         obj.add(pageSize);
 
@@ -145,7 +153,7 @@ public class NoteDao {
      */
     public Note findNoteById(String noteId) {
         //定义sql语句
-        String sql ="select noteId,title,content,pubTime,typeName from tb_note n inner join tb_note_type t on n.typeId=t.typeId where noteId=?";
+        String sql ="select noteId,title,content,pubTime,typeName,n.typeId from tb_note n inner join tb_note_type t on n.typeId=t.typeId where noteId=?";
         //设置 参数
         List<Object> obj =new ArrayList<>();
         obj.add(noteId);

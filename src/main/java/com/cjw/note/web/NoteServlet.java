@@ -1,5 +1,6 @@
 package com.cjw.note.web;
 
+import cn.hutool.core.util.StrUtil;
 import com.cjw.note.po.Note;
 import com.cjw.note.po.NoteType;
 import com.cjw.note.po.User;
@@ -102,8 +103,10 @@ public class NoteServlet  extends HttpServlet {
         String typeId=req.getParameter("typeId");
         String title=req.getParameter("title");
         String content=req.getParameter("content");
+        //如果是修改操作接收noteId
+        String noteId =req.getParameter("noteId");
         //2. 调用Service层方法，返回resultInfo对象
-        ResultInfo<Note> resultInfo =noteService.addOrUpdate(typeId,title,content);
+        ResultInfo<Note> resultInfo =noteService.addOrUpdate(typeId,title,content,noteId);
         //3. 判断resultInfo的code值
         if (resultInfo.getCode() ==1){
             resp.sendRedirect("index");
@@ -111,7 +114,12 @@ public class NoteServlet  extends HttpServlet {
             //将resultInfo 对象设置到req作用域
             req.setAttribute("resultInfo",resultInfo);
             //请求转发跳转到note?actionName=view
-            req.getRequestDispatcher("note?actionName=view").forward(req,resp);
+            //修改操作传noteId
+            String url="note?actionName=view";
+            if (StrUtil.isBlank(url)){
+                url +="&noteId="+noteId;
+            }
+            req.getRequestDispatcher(url).forward(req,resp);
         }
     }
 
@@ -126,6 +134,14 @@ public class NoteServlet  extends HttpServlet {
      * @param resp
      */
     private void noteView(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //修改操作
+        //得到要修改的id
+        String noteId=req.getParameter("noteId");
+        //通过noteId查询对象
+        Note note = noteService.findNoteById(noteId);
+        //将对象设置道歉请求域
+        req.setAttribute("noteInfo",note);
+        //修改操作
         //1. 从Session对象中获取用户对象
         User user= (User) req.getSession().getAttribute("user");
         //2. 通过用户ID查询对应的类型列表
