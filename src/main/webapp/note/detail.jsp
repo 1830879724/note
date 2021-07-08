@@ -49,7 +49,7 @@
                 url: "note",
                 data:{
                     actionName:"delete",
-                    typeId:noteId,
+                    noteId:noteId,
                 },
                 success:function(code){
                     // 判断是否删除成功

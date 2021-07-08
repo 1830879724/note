@@ -152,4 +152,20 @@ public class NoteDao {
         Note note= (Note) BaseDao.queryRow(sql,obj,Note.class);
         return note;
     }
+
+    /**
+     * 删除云记
+        通过noteId删除云记记录，返回受影响的行数
+     * @param noteId
+     * @return
+     */
+    public int deleteNoteById(String noteId) {
+        //定义sql语句
+        String sql="delete from tb_note where noteId = ?";
+        //设置 参数
+        List<Object> obj =new ArrayList<>();
+        obj.add(noteId);
+        int row =BaseDao.executeUpdate(sql,obj);
+        return row;
+    }
 }

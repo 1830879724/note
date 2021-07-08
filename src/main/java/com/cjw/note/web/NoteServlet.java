@@ -37,7 +37,28 @@ public class NoteServlet  extends HttpServlet {
         }else if ("detail".equals(actionName)){
             //查询云记详情
             noteDetail(req,resp);
+        }else if ("delete".equals(actionName)){
+            //删除云记
+            noteDelete(req,resp);
         }
+    }
+
+    /**
+     * 删除云记
+         1. 接收参数 （noteId）
+         2. 调用Service层删除方法，返回状态码 （1=成功，0=失败）
+         3. 通过流将结果响应给ajax的回调函数 （输出字符串）
+     * @param req
+     * @param resp
+     */
+    private void noteDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        // 1. 接收参数 （noteId）
+        String noteId=req.getParameter("noteId");
+        // 2. 调用Service层删除方法，返回状态码 （1=成功，0=失败）
+        Integer code =noteService.deleteNote(noteId);
+        // 3. 通过流将结果响应给ajax的回调函数 （输出字符串）
+        resp.getWriter().write(code +"");
+        resp.getWriter().close();
     }
 
     /**

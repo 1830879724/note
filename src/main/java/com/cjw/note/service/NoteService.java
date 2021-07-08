@@ -148,4 +148,27 @@ public class NoteService {
         //3. 返回note对象
         return note;
     }
+
+    /**
+     * 删除云记
+         1. 判断参数
+         2. 调用Dao层的更新方法，返回受影响的行数
+         3. 判断受影响的行数是否大于0
+            如果大于0，返回1；否则返回0
+     * @param noteId
+     * @return
+     */
+    public Integer deleteNote(String noteId) {
+        // 1. 判断参数
+        if (StrUtil.isBlank(noteId)){
+            return 0;
+        }
+        //2. 调用Dao层的更新方法，返回受影响的行数
+        int row =noteDao.deleteNoteById(noteId);
+        //3. 判断受影响的行数是否大于0
+        if (row>0){
+            return 1;
+        }
+        return 0;
+    }
 }
