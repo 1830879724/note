@@ -14,5 +14,6 @@ public class Note {
     private String content;//云记内容
     private Integer typeId;//云记类型ID
     private Date pubTime;//发布时间
+    private String typeName;//类型名称
 
 }

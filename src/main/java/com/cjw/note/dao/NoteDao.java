@@ -145,7 +145,7 @@ public class NoteDao {
      */
     public Note findNoteById(String noteId) {
         //定义sql语句
-        String sql ="select * from tb_note where noteId=?";
+        String sql ="select noteId,title,content,pubTime,typeName from tb_note n inner join tb_note_type t on n.typeId=t.typeId where noteId=?";
         //设置 参数
         List<Object> obj =new ArrayList<>();
         obj.add(noteId);

@@ -28,7 +28,7 @@
                 <C:forEach items="${page.dataList}" var="item">
                 <li>
                     『<fmt:formatDate value="${item.pubTime}" pattern="yyyy-MM-dd"/>』
-                    <a href="">${item.title}</a>
+                    <a href="note?actionName=detail&noteId=${item.noteId}">${item.title}</a>
                 </li>
                 </C:forEach>
             </ul>
