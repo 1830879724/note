@@ -218,4 +218,21 @@ public class NoteService {
         }
         return resultInfo;
     }
+
+    /**
+     * 查询用户发布日记时的坐标
+     * @param userId
+     * @return
+     */
+    public ResultInfo<List<Note>> queryNoteLonAndLat(Integer userId) {
+        ResultInfo<List<Note>> resultInfo =new ResultInfo<>();
+        //通过用户id查询记录
+        List<Note> noteList=noteDao.queryNoteList(userId);
+        //判断是否为空
+        if (noteList !=null && noteList.size()>0){
+            resultInfo.setCode(1);
+            resultInfo.setResult(noteList);
+        }
+        return resultInfo;
+    }
 }

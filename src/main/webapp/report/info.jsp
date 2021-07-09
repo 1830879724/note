@@ -27,7 +27,7 @@
 
 <script type="text/javascript" src="statics/echarts/echarts.min.js"></script>
 <%--引用百度地图API文件--%>
-<script type="text/javascript" src="https://api.map.baidu.com/api?v=1.0&&type=webgl&ak=3yArCy8oCvYeVn5MliAAiSaomaLExP94"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&&type=webgl&ak=3yArCy8oCvYeVn5MliAAiSaomaLExP94"></script>
 <script type="text/javascript">
     /**
      * 通过月份查询云记数量
@@ -134,27 +134,44 @@
              // 使用刚指定的配置项和数据显示图表。
              myChart.setOption(option);
  }
+     /**
+     * 通过用户发布的坐标查询数量
+     */
+ $.ajax({
+     type:"get",
+     url: "report",
+     data:{
+         actionName:"location",
+     },
+     success:function (result){
+         if (result.code==1){
+             loadBaiduMap(result.result);
+         }
+     }
 
-    loadBaiduMap();
+ })
     /**
      * 加载百度地图
      */
-    function loadBaiduMap(){
+    function loadBaiduMap(markers){
         var map = new BMapGL.Map("baiduMap");
         var point = new BMapGL.Point(116.404, 39.915);
-        map.centerAndZoom(point, 15);
+        map.centerAndZoom(point, 10);
         map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
         var zoomCtrl = new BMapGL.ZoomControl();  // 添加比例尺控件
         map.addControl(zoomCtrl);
-        // 创建点标记
-        var marker1 = new BMapGL.Marker(new BMapGL.Point(116.404, 39.925));
-        var marker2 = new BMapGL.Marker(new BMapGL.Point(116.404, 39.915));
-        var marker3 = new BMapGL.Marker(new BMapGL.Point(116.395, 39.935));
-        var marker4 = new BMapGL.Marker(new BMapGL.Point(116.415, 39.931));
-        // 在地图上添加点标记
-        map.addOverlay(marker1);
-        map.addOverlay(marker2);
-        map.addOverlay(marker3);
-        map.addOverlay(marker4);
+
+        //判断是否有坐标
+        if(markers !=null && markers.length>0){ //集合中的第一个坐标，是用户当前所在的位置，其他是用户记录的经纬度
+            //将用户所在的位置设置为中心点
+            map.centerAndZoom(new BMapGL.Point(markers[0].lon,markers[0].lat), 10);
+            //循环在地图上添加点标记
+            for (var i=1;i<markers.length;i++){
+                // 创建点标记
+                var marker = new BMapGL.Marker(new BMapGL.Point(markers[i].lon, markers[i].lat));
+                // 在地图上添加点标记
+                map.addOverlay(marker);
+            }
+        }
     }
 </script>

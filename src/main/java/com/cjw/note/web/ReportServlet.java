@@ -1,5 +1,6 @@
 package com.cjw.note.web;
 
+import com.cjw.note.po.Note;
 import com.cjw.note.po.User;
 import com.cjw.note.service.NoteService;
 import com.cjw.note.util.JSONUtil;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet("/report")
@@ -32,6 +34,24 @@ public class ReportServlet extends HttpServlet {
             //通过月份查询数量
             queryNoteMonth(req,resp);
         }
+        else if ("location".equals(actionName)){
+            //查询用户发布日记时的坐标
+            queryNoteLonAndLat(req,resp);
+        }
+    }
+
+    /**
+     * 查询用户发布日记时的坐标
+     * @param req
+     * @param resp
+     */
+    private void queryNoteLonAndLat(HttpServletRequest req, HttpServletResponse resp) {
+        //作用域中获取用户对象
+        User user= (User) req.getSession().getAttribute("user");
+        //调用Service的查询方法，返回ResultInfo对象
+        ResultInfo<List<Note>> resultInfo =noteService.queryNoteLonAndLat(user.getUserId());
+        //将ResultInfo转成字符串，响应给Ajax回调函数
+        JSONUtil.toJson(resp,resultInfo);
     }
 
     /**

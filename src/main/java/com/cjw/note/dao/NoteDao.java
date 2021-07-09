@@ -178,4 +178,20 @@ public class NoteDao {
         int row =BaseDao.executeUpdate(sql,obj);
         return row;
     }
+
+    /**
+     * 通过用户id查询记录
+     * @param userId
+     * @return
+     */
+    public List<Note> queryNoteList(Integer userId) {
+        //定义sql语句
+        String sql="select lon,lat from tb_note n inner join tb_note_type t on n.typeId=t.typeId  where userId =?";
+        //设置 参数
+        List<Object> obj =new ArrayList<>();
+        obj.add(userId);
+        //调用BaseDao方法
+        List<Note> list=BaseDao.queryRows(sql,obj,Note.class);
+        return list;
+    }
 }
